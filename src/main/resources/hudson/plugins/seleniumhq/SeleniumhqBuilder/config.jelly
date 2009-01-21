@@ -1,0 +1,22 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+    <!--
+    This jelly script is used for per-project configuration.
+
+    See global.jelly for a general discussion about jelly script.
+    -->
+    <f:entry title="browser" help="${rootURL}/plugin/seleniumhq/help-builder-browser.html">
+        <f:textbox field="browser" />
+    </f:entry>
+    <f:entry title="startURL" help="${rootURL}/plugin/seleniumhq/help-builder-starturl.html">
+        <f:textbox field="startURL" />
+    </f:entry>
+    <f:entry title="suiteFile" help="${rootURL}/plugin/seleniumhq/help-builder-suitefile.html">
+        <f:textbox field="suiteFile" />
+    </f:entry>
+    <f:entry title="resultFile" help="${rootURL}/plugin/seleniumhq/help-builder-resultfile.html">
+        <f:textbox field="resultFile" />
+    </f:entry>    
+    <f:entry title="other" help="${rootURL}/plugin/seleniumhq/help-builder-other.html">
+        <f:textbox field="other" />
+    </f:entry> 
+</j:jelly>

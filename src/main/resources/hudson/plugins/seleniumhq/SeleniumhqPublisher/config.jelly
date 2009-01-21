@@ -1,0 +1,7 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+  <f:entry title="${%title}"
+    description="${%description}">
+    <f:textbox name="seleniumhq.testResults" value="${instance.testResults}"
+               checkUrl="'descriptorByName/SeleniumhqPublisher/check?value='+escape(this.value)"/>
+  </f:entry>
+</j:jelly>

@@ -1,0 +1,481 @@
+<html>
+<head><style type='text/css'>
+body, table {
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 12;
+}
+
+table {
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+}
+
+a {
+    text-decoration: none;
+}
+
+.title {
+    font-style: italic;
+}
+
+.selected {
+    background-color: #ffffcc;
+}
+
+.status_done {
+    background-color: #eeffee;
+}
+
+.status_passed {
+    background-color: #ccffcc;
+}
+
+.status_failed {
+    background-color: #ffcccc;
+}
+
+.breakpoint {
+    background-color: #cccccc;
+    border: 1px solid black;
+}
+</style><title>Test suite results</title></head>
+<body>
+<h1>Test suite results </h1>
+
+<table>
+<tr>
+<td>result:</td>
+<td>failed</td>
+</tr>
+<tr>
+<td>totalTime:</td>
+<td>4</td>
+</tr>
+<tr>
+<td>numTestTotal:</td>
+<td>3</td>
+</tr>
+<tr>
+<td>numTestPasses:</td>
+<td>2</td>
+</tr>
+<tr>
+<td>numTestFailures:</td>
+<td>1</td>
+</tr>
+<tr>
+<td>numCommandPasses:</td>
+<td>37</td>
+</tr>
+<tr>
+<td>numCommandFailures:</td>
+<td>5</td>
+</tr>
+<tr>
+<td>numCommandErrors:</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Selenium Version:</td>
+<td>undefined</td>
+</tr>
+<tr>
+<td>Selenium Revision:</td>
+<td>undefined</td>
+</tr>
+<tr>
+<td><TABLE cellSpacing=1 cellPadding=1 border=1>
+<TBODY>
+<TR class="title      status_failed" id=errorTitle>
+<TD><B>Error Checking Test Suite</B></TD></TR>
+<TR class="  status_failed" id=errorCaseTitle>
+<TD><A href="#testresult0">TestErrorChecking</A></TD></TR>
+<TR class="  status_passed">
+<TD><A id=TestType href="#testresult1">TestType</A></TD></TR>
+<TR class="  status_passed">
+<TD><A href="#testresult2">TestSelect</A></TD></TR></TBODY></TABLE></td>
+<td>&nbsp;</td>
+</tr>
+</table><table><tr>
+<td><a name="testresult0">./TestErrorChecking.html</a><br/><DIV>
+<TABLE cellSpacing=1 cellPadding=1 border=1>
+<P><EM>This test should fail!</EM> 
+<P></P>
+<P>The following test script checks that when verifyFailureOnNext and verifyErrorOnNext are used, the following command should fail and the verified error message must match the actual message.</P>
+<P>If this functionality is working correctly, each of the following verifyText commands should fail because the verifyFailure/Error doesn't match.</P>
+<TBODY>
+<TR class="title status_failed">
+<TD colSpan=3>Tests for expectError and expectFailure commands<BR></TD></TR>
+<TR class="  status_done" style="CURSOR: pointer">
+<TD>open</TD>
+<TD>../tests/html/test_click_page1.html</TD>
+<TD originalHTML="&amp;nbsp;">&nbsp;</TD></TR><!-- These tests should all fail, as they are checking the error checking commands. -->
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifyFailureOnNext</TD>
+<TD>The next command actually succeeds so this verify is wrong</TD>
+<TD originalHTML></TD></TR>
+<TR class="  status_failed" id=failure1 style="CURSOR: pointer">
+<TD>verifyText</TD>
+<TD>link</TD>
+<TD originalHTML="Click here for next page">Expected&nbsp;failure&nbsp;did&nbsp;not&nbsp;occur.</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifyErrorOnNext</TD>
+<TD>The next command is an action that succeeds (instead of an accessor)</TD>
+<TD originalHTML></TD></TR>
+<TR class="  status_failed" id=failure2 style="CURSOR: pointer">
+<TD>echo</TD>
+<TD>foo</TD>
+<TD originalHTML>Expected&nbsp;error&nbsp;did&nbsp;not&nbsp;occur.</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifyFailureOnNext</TD>
+<TD>The next command does fail, but this is the wrong message</TD>
+<TD originalHTML></TD></TR>
+<TR class="  status_failed" id=failure3 style="CURSOR: pointer">
+<TD>verifyText</TD>
+<TD>link</TD>
+<TD originalHTML="foo">Expected&nbsp;failure&nbsp;message&nbsp;'The&nbsp;next&nbsp;command&nbsp;does&nbsp;fail,&nbsp;but&nbsp;this&nbsp;is&nbsp;the&nbsp;wrong&nbsp;message'&nbsp;but&nbsp;was&nbsp;'Actual&nbsp;value&nbsp;'Click&nbsp;here&nbsp;for&nbsp;next&nbsp;page'&nbsp;did&nbsp;not&nbsp;match&nbsp;'foo''</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifyErrorOnNext</TD>
+<TD>The next command actually succeeds so this verify is wrong</TD>
+<TD originalHTML></TD></TR>
+<TR class="  status_failed" id=failure4 style="CURSOR: pointer">
+<TD>verifyText</TD>
+<TD>link</TD>
+<TD originalHTML="Click here for next page">Expected&nbsp;error&nbsp;did&nbsp;not&nbsp;occur.</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifyErrorOnNext</TD>
+<TD>The next command has a failure, not an error</TD>
+<TD originalHTML></TD></TR>
+<TR class="  status_failed" id=failure5 style="CURSOR: pointer">
+<TD>verifyText</TD>
+<TD>link</TD>
+<TD originalHTML="foo">Expected&nbsp;error&nbsp;message&nbsp;'The&nbsp;next&nbsp;command&nbsp;has&nbsp;a&nbsp;failure,&nbsp;not&nbsp;an&nbsp;error'&nbsp;but&nbsp;was&nbsp;'Actual&nbsp;value&nbsp;'Click&nbsp;here&nbsp;for&nbsp;next&nbsp;page'&nbsp;did&nbsp;not&nbsp;match&nbsp;'foo''</TD></TR></TBODY></P></TABLE>This next command must come last, because it causes a real error. 
+<TABLE>
+<TBODY>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifyErrorOnNext</TD>
+<TD>The next command does error, but this is the wrong message</TD>
+<TD originalHTML></TD></TR>
+<TR class="  status_failed" id=failure6 style="CURSOR: pointer">
+<TD>verifyText</TD>
+<TD>notAlink</TD>
+<TD originalHTML="foo">Expected&nbsp;error&nbsp;message&nbsp;'The&nbsp;next&nbsp;command&nbsp;does&nbsp;error,&nbsp;but&nbsp;this&nbsp;is&nbsp;the&nbsp;wrong&nbsp;message'&nbsp;but&nbsp;was&nbsp;'Element&nbsp;notAlink&nbsp;not&nbsp;found'</TD></TR></TBODY></TABLE></DIV></td>
+<td>&nbsp;</td>
+</tr><tr>
+<td><a name="testresult1">./TestType.html</a><br/><DIV>
+<TABLE cellSpacing=1 cellPadding=1 border=1>
+<TBODY>
+<TR class="title status_passed">
+<TD colSpan=3>Test Type<BR></TD></TR>
+<TR class="  status_done" style="CURSOR: pointer">
+<TD>open</TD>
+<TD>../tests/html/test_type_page1.html</TD>
+<TD originalHTML="&amp;nbsp;">&nbsp;</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifyValue</TD>
+<TD>username</TD>
+<TD originalHTML="&amp;nbsp;">&nbsp;</TD></TR>
+<TR class="  status_done" style="CURSOR: pointer">
+<TD>shiftKeyDown</TD>
+<TD></TD>
+<TD originalHTML></TD></TR>
+<TR class="  status_done" style="CURSOR: pointer">
+<TD>type</TD>
+<TD>username</TD>
+<TD originalHTML="x">x</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifyValue</TD>
+<TD>username</TD>
+<TD originalHTML="X">X</TD></TR>
+<TR class="  status_done" style="CURSOR: pointer">
+<TD>shiftKeyUp</TD>
+<TD></TD>
+<TD originalHTML></TD></TR>
+<TR class="  status_done" style="CURSOR: pointer">
+<TD>type</TD>
+<TD>username</TD>
+<TD originalHTML="TestUserWithLongName">TestUserWithLongName</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifyValue</TD>
+<TD>username</TD>
+<TD originalHTML="TestUserWi">TestUserWi</TD></TR>
+<TR class="  status_done" style="CURSOR: pointer">
+<TD>type</TD>
+<TD>username</TD>
+<TD originalHTML="TestUser">TestUser</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifyValue</TD>
+<TD>username</TD>
+<TD originalHTML="TestUser">TestUser</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifyValue</TD>
+<TD>password</TD>
+<TD originalHTML="&amp;nbsp;">&nbsp;</TD></TR>
+<TR class="  status_done" style="CURSOR: pointer">
+<TD>type</TD>
+<TD>password</TD>
+<TD originalHTML="testUserPasswordIsVeryLong">testUserPasswordIsVeryLong</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifyValue</TD>
+<TD>password</TD>
+<TD originalHTML="testUserPasswordIsVe">testUserPasswordIsVe</TD></TR>
+<TR class="  status_done" style="CURSOR: pointer">
+<TD>type</TD>
+<TD>password</TD>
+<TD originalHTML="testUserPassword">testUserPassword</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifyValue</TD>
+<TD>password</TD>
+<TD originalHTML="testUserPassword">testUserPassword</TD></TR>
+<TR class="  status_done" style="CURSOR: pointer">
+<TD>clickAndWait</TD>
+<TD>submitButton</TD>
+<TD originalHTML="&amp;nbsp;">&nbsp;</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifyTextPresent</TD>
+<TD>Welcome, TestUser!<BR></TD>
+<TD originalHTML="&amp;nbsp;">&nbsp;</TD></TR></TBODY></TABLE></DIV></td>
+<td>&nbsp;</td>
+</tr><tr>
+<td><a name="testresult2">./TestSelect.html</a><br/><DIV>
+<TABLE cellSpacing=1 cellPadding=1 border=1>
+<TBODY>
+<TR class="title status_passed">
+<TD colSpan=3>Test Select<BR></TD></TR>
+<TR class="  status_done" style="CURSOR: pointer">
+<TD>open</TD>
+<TD>../tests/html/test_select.html</TD>
+<TD originalHTML="&amp;nbsp;">&nbsp;</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>assertSomethingSelected</TD>
+<TD>theSelect</TD>
+<TD originalHTML="&amp;nbsp;">&nbsp;</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>assertSelected</TD>
+<TD>theSelect</TD>
+<TD originalHTML="Second Option">Second Option</TD></TR></TBODY></TABLE>Index 
+<TABLE cellSpacing=1 cellPadding=1 border=1>
+<TBODY>
+<TR class="  status_done" style="CURSOR: pointer">
+<TD>select</TD>
+<TD>theSelect</TD>
+<TD originalHTML="index=4">index=4</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifySelectedLabel</TD>
+<TD>theSelect</TD>
+<TD originalHTML="Fifth Option">Fifth Option</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifySelected</TD>
+<TD>theSelect</TD>
+<TD originalHTML="index=4">index=4</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifySelectedLabel</TD>
+<TD>theSelect</TD>
+<TD originalHTML="Fifth Option">Fifth Option</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifySelectedLabels</TD>
+<TD>theSelect</TD>
+<TD originalHTML="Fifth Option">Fifth Option</TD></TR></TBODY></TABLE>Label 
+<TABLE cellSpacing=1 cellPadding=1 border=1>
+<TBODY>
+<TR class="  status_done" style="CURSOR: pointer">
+<TD>select</TD>
+<TD>theSelect</TD>
+<TD originalHTML="Third Option">Third Option</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifySelected</TD>
+<TD>theSelect</TD>
+<TD originalHTML="Third Option">Third Option</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifySelected</TD>
+<TD>theSelect</TD>
+<TD originalHTML="label=Third Option">label=Third Option</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifySelectedLabel</TD>
+<TD>theSelect</TD>
+<TD originalHTML="Third Option">Third Option</TD></TR>
+<TR class="  status_done" style="CURSOR: pointer">
+<TD>select</TD>
+<TD>theSelect</TD>
+<TD originalHTML="label=Fourth Option">label=Fourth Option</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifySelectedLabel</TD>
+<TD>theSelect</TD>
+<TD originalHTML="Fourth Option">Fourth Option</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifySelected</TD>
+<TD>theSelect</TD>
+<TD originalHTML="Fourth Option">Fourth Option</TD></TR></TBODY></TABLE>Value 
+<TABLE cellSpacing=1 cellPadding=1 border=1>
+<TBODY>
+<TR class="  status_done" style="CURSOR: pointer">
+<TD>select</TD>
+<TD>theSelect</TD>
+<TD originalHTML="value=option6">value=option6</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifySelectedLabel</TD>
+<TD>theSelect</TD>
+<TD originalHTML="Sixth Option">Sixth Option</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifySelectedValue</TD>
+<TD>theSelect</TD>
+<TD originalHTML="option6">option6</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifySelected</TD>
+<TD>theSelect</TD>
+<TD originalHTML="value=option6">value=option6</TD></TR>
+<TR class="  status_done" style="CURSOR: pointer">
+<TD>select</TD>
+<TD>theSelect</TD>
+<TD originalHTML="value=">value=</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifySelectedLabel</TD>
+<TD>theSelect</TD>
+<TD originalHTML="Empty Value Option">Empty Value Option</TD></TR></TBODY></TABLE>IDs 
+<TABLE cellSpacing=1 cellPadding=1 border=1>
+<TBODY>
+<TR class="  status_done" style="CURSOR: pointer">
+<TD>select</TD>
+<TD>theSelect</TD>
+<TD originalHTML="id=o4">id=o4</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifySelectedLabel</TD>
+<TD>theSelect</TD>
+<TD originalHTML="Fourth Option">Fourth Option</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifySelectedId</TD>
+<TD>theSelect</TD>
+<TD originalHTML="o4">o4</TD></TR></TBODY></TABLE>No text = Empty label 
+<TABLE cellSpacing=1 cellPadding=1 border=1>
+<TBODY>
+<TR class="  status_done" style="CURSOR: pointer">
+<TD>select</TD>
+<TD>theSelect</TD>
+<TD originalHTML></TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifySelectedLabel</TD>
+<TD>theSelect</TD>
+<TD originalHTML></TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifySelectedLabels</TD>
+<TD>theSelect</TD>
+<TD originalHTML></TD></TR></TBODY></TABLE>Select an option that doesn't exist 
+<TABLE cellSpacing=1 cellPadding=1 border=1>
+<TBODY>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>assertErrorOnNext</TD>
+<TD>Option with label 'Not an option' not found</TD>
+<TD originalHTML></TD></TR>
+<TR class="  status_done" style="CURSOR: pointer">
+<TD>select</TD>
+<TD>theSelect</TD>
+<TD originalHTML="Not an option">Not an option</TD></TR></TBODY></TABLE>Multi-select commands will not work 
+<TABLE cellSpacing=1 cellPadding=1 border=1>
+<TBODY>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>assertErrorOnNext</TD>
+<TD>Not a multi-select</TD>
+<TD originalHTML></TD></TR>
+<TR class="  status_done" style="CURSOR: pointer">
+<TD>addSelection</TD>
+<TD>theSelect</TD>
+<TD originalHTML="Fourth Option">Fourth Option</TD></TR>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>assertErrorOnNext</TD>
+<TD>Not a multi-select</TD>
+<TD originalHTML></TD></TR>
+<TR class="  status_done" style="CURSOR: pointer">
+<TD>removeSelection</TD>
+<TD>theSelect</TD>
+<TD originalHTML="Fourth Option">Fourth Option</TD></TR></TBODY></TABLE>assertSelectOptions 
+<TABLE cellSpacing=1 cellPadding=1 border=1>
+<TBODY>
+<TR class="  status_passed" style="CURSOR: pointer">
+<TD>verifySelectOptions</TD>
+<TD>theSelect</TD>
+<TD originalHTML="First Option,Second Option,Third Option,Fourth Option,Fifth Option,Sixth Option,Empty Value Option,">First Option,Second Option,Third Option,Fourth Option,Fifth Option,Sixth Option,Empty Value Option,</TD></TR></TBODY></TABLE></DIV></td>
+<td>&nbsp;</td>
+</tr></table><pre>
+info: Starting test /selenium-server/tests/TestErrorChecking.html
+info: Executing: |open | ../tests/html/test_click_page1.html |  |
+info: Executing: |verifyFailureOnNext | The next command actually succeeds so this verify is wrong |  |
+info: Executing: |verifyText | link | Click here for next page |
+warn: currentTest.recordFailure: Expected failure did not occur.
+info: Executing: |verifyErrorOnNext | The next command is an action that succeeds (instead of an accessor) |  |
+info: Executing: |echo | foo |  |
+warn: currentTest.recordFailure: Expected error did not occur.
+info: Executing: |verifyFailureOnNext | The next command does fail, but this is the wrong message |  |
+info: Executing: |verifyText | link | foo |
+warn: currentTest.recordFailure: Expected failure message &apos;The next command does fail, but this is the wrong message&apos; but was &apos;Actual value &apos;Click here for next page&apos; did not match &apos;foo&apos;&apos;
+info: Executing: |verifyErrorOnNext | The next command actually succeeds so this verify is wrong |  |
+info: Executing: |verifyText | link | Click here for next page |
+warn: currentTest.recordFailure: Expected error did not occur.
+info: Executing: |verifyErrorOnNext | The next command has a failure, not an error |  |
+info: Executing: |verifyText | link | foo |
+warn: currentTest.recordFailure: Expected error message &apos;The next command has a failure, not an error&apos; but was &apos;Actual value &apos;Click here for next page&apos; did not match &apos;foo&apos;&apos;
+info: Executing: |verifyErrorOnNext | The next command does error, but this is the wrong message |  |
+info: Executing: |verifyText | notAlink | foo |
+error: Element notAlink not found
+warn: currentTest.recordFailure: Expected error message &apos;The next command does error, but this is the wrong message&apos; but was &apos;Element notAlink not found&apos;
+info: Starting test /selenium-server/tests/TestType.html
+info: Executing: |open | ../tests/html/test_type_page1.html |  |
+info: Executing: |verifyValue | username |  |
+info: Executing: |shiftKeyDown |  |  |
+info: Executing: |type | username | x |
+info: Executing: |verifyValue | username | X |
+info: Executing: |shiftKeyUp |  |  |
+info: Executing: |type | username | TestUserWithLongName |
+info: Executing: |verifyValue | username | TestUserWi |
+info: Executing: |type | username | TestUser |
+info: Executing: |verifyValue | username | TestUser |
+info: Executing: |verifyValue | password |  |
+info: Executing: |type | password | testUserPasswordIsVeryLong |
+info: Executing: |verifyValue | password | testUserPasswordIsVe |
+info: Executing: |type | password | testUserPassword |
+info: Executing: |verifyValue | password | testUserPassword |
+info: Executing: |clickAndWait | submitButton |  |
+info: Executing: |verifyTextPresent | Welcome, TestUser! |  |
+info: Starting test /selenium-server/tests/TestSelect.html
+info: Executing: |open | ../tests/html/test_select.html |  |
+info: Executing: |assertSomethingSelected | theSelect |  |
+info: Executing: |assertSelected | theSelect | Second Option |
+info: Executing: |select | theSelect | index=4 |
+info: Executing: |verifySelectedLabel | theSelect | Fifth Option |
+info: Executing: |verifySelected | theSelect | index=4 |
+info: Executing: |verifySelectedLabel | theSelect | Fifth Option |
+info: Executing: |verifySelectedLabels | theSelect | Fifth Option |
+info: Executing: |select | theSelect | Third Option |
+info: Executing: |verifySelected | theSelect | Third Option |
+info: Executing: |verifySelected | theSelect | label=Third Option |
+info: Executing: |verifySelectedLabel | theSelect | Third Option |
+info: Executing: |select | theSelect | label=Fourth Option |
+info: Executing: |verifySelectedLabel | theSelect | Fourth Option |
+info: Executing: |verifySelected | theSelect | Fourth Option |
+info: Executing: |select | theSelect | value=option6 |
+info: Executing: |verifySelectedLabel | theSelect | Sixth Option |
+info: Executing: |verifySelectedValue | theSelect | option6 |
+info: Executing: |verifySelected | theSelect | value=option6 |
+info: Executing: |select | theSelect | value= |
+info: Executing: |verifySelectedLabel | theSelect | Empty Value Option |
+info: Executing: |select | theSelect | id=o4 |
+info: Executing: |verifySelectedLabel | theSelect | Fourth Option |
+info: Executing: |verifySelectedId | theSelect | o4 |
+info: Executing: |select | theSelect |  |
+info: Executing: |verifySelectedLabel | theSelect |  |
+info: Executing: |verifySelectedLabels | theSelect |  |
+info: Executing: |assertErrorOnNext | Option with label &apos;Not an option&apos; not found |  |
+info: Executing: |select | theSelect | Not an option |
+error: Option with label &apos;Not an option&apos; not found
+info: Executing: |assertErrorOnNext | Not a multi-select |  |
+info: Executing: |addSelection | theSelect | Fourth Option |
+error: Not a multi-select
+info: Executing: |assertErrorOnNext | Not a multi-select |  |
+info: Executing: |removeSelection | theSelect | Fourth Option |
+error: Not a multi-select
+info: Executing: |verifySelectOptions | theSelect | First Option,Second Option,Third Option,Fourth Option,Fifth Option,Sixth Option,Empty Value Option, |
+</pre></body></html>
