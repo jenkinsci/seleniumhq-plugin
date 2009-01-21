@@ -17,7 +17,9 @@ import hudson.util.StackedAreaRenderer2;
 import hudson.util.ChartUtil.NumberOnlyBuildLabel;
 
 import java.awt.Color;
+import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import javax.servlet.ServletException;
 
@@ -60,8 +62,18 @@ public class SeleniumhqProjectAction extends Actionable implements ProminentProj
 
 	public void doDynamic(StaplerRequest req, StaplerResponse rsp) throws IOException, ServletException,InterruptedException 
 	{
-		new DirectoryBrowserSupport(this, "Seleniumhq").serveFile(req, rsp,
-	        new FilePath(SeleniumhqPublisher.getSeleniumReportDir(project)), "graph.gif", false);
+		File rootFile = SeleniumhqPublisher.getSeleniumReportDir(project);
+		if (!rootFile.exists())rootFile.mkdir();		
+		FilePath rootTarget =  new FilePath(rootFile);		
+		if (rootTarget.list().size() == 0)
+		{
+			// Make index
+			String index = "<html><head><title>Selenium result</title></head><body><center><br/><h2>No Selenium Test Result</h2></center></body></html>";
+        	OutputStream output = rootTarget.child("index.html").write();
+        	output.write(index.getBytes());
+        	output.close();
+		}
+		new DirectoryBrowserSupport(this, "Seleniumhq").serveFile(req, rsp, rootTarget, "graph.gif", false);
 	}
 	
     public SeleniumhqBuildAction getLastResult() {

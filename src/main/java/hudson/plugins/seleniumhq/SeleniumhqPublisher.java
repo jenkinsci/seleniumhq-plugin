@@ -110,7 +110,8 @@ public class SeleniumhqPublisher extends Publisher implements Serializable {
                     
             
             // Store result file 
-            FilePath rootTarget =  new FilePath(getSeleniumReportDir(build.getParent()));
+            FilePath rootTarget =  new FilePath(getSeleniumReportDir(build.getParent()));            
+            rootTarget.deleteContents();
             
             List<File> files = result.getFiles();
             if (files.size() == 1)
