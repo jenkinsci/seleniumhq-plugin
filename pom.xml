@@ -11,5 +11,5 @@
   <packaging>hpi</packaging>
   <version>0.2-SNAPSHOT</version>
   <name>Hudson Seleniumhq plugin</name>
-  <url>http://hudson.gotdns.com/wiki/display/HUDSON/Seleniumhq+Plugin</url>
+  <url>http://wiki.hudson-ci.org/display/HUDSON/Seleniumhq+Plugin</url>
 </project>
