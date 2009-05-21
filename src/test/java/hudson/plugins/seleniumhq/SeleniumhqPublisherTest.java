@@ -119,8 +119,7 @@ public class SeleniumhqPublisherTest extends HudsonTestCase
 	 * @throws Exception
 	 */
 	public void test4() throws Exception 
-	{
-		/*
+	{		
         FreeStyleProject project = createFreeStyleProject();
         project.getPublishersList().add(new SeleniumhqPublisher("*.html"));
         
@@ -129,14 +128,9 @@ public class SeleniumhqPublisherTest extends HudsonTestCase
         
         assertEquals(Result.SUCCESS, build.getResult());
 
-        Action action = build.getAction(0);
-        assertTrue(action instanceof SeleniumhqBuildAction);
-        
-        SeleniumhqBuildAction buildAction = (SeleniumhqBuildAction)action;
-        assertEquals(0, buildAction.getResult().getNumTestFailures());
-        assertEquals(7, buildAction.getResult().getNumTestPasses());
-        assertEquals(7, buildAction.getResult().getNumTestTotal());
-        */
+        String s = FileUtils.readFileToString(build.getLogFile());
+        assertTrue(s.contains("Test failures: 0"));
+        assertTrue(s.contains("Test totals  : 7"));          
     }
 	
 	/**
@@ -144,8 +138,7 @@ public class SeleniumhqPublisherTest extends HudsonTestCase
 	 * @throws Exception
 	 */
 	public void test5() throws Exception 
-	{
-		/*
+	{		
         FreeStyleProject project = createFreeStyleProject();
         project.getPublishersList().add(new SeleniumhqPublisher("*.html"));
         
@@ -154,14 +147,9 @@ public class SeleniumhqPublisherTest extends HudsonTestCase
         
         assertEquals(Result.UNSTABLE, build.getResult());
 
-        Action action = build.getAction(0);
-        assertTrue(action instanceof SeleniumhqBuildAction);
-        
-        SeleniumhqBuildAction buildAction = (SeleniumhqBuildAction)action;
-        assertEquals(1, buildAction.getResult().getNumTestFailures());
-        assertEquals(2, buildAction.getResult().getNumTestPasses());
-        assertEquals(3, buildAction.getResult().getNumTestTotal());
-        */
+        String s = FileUtils.readFileToString(build.getLogFile());
+        assertTrue(s.contains("Test failures: 1"));
+        assertTrue(s.contains("Test totals  : 3"));    
     }
 	
 	/**
@@ -169,8 +157,7 @@ public class SeleniumhqPublisherTest extends HudsonTestCase
 	 * @throws Exception
 	 */
 	public void test6() throws Exception 
-	{
-		/*
+	{		
         FreeStyleProject project = createFreeStyleProject();
         project.getPublishersList().add(new SeleniumhqPublisher("*.html"));
         
@@ -183,14 +170,9 @@ public class SeleniumhqPublisherTest extends HudsonTestCase
         
         assertEquals(Result.SUCCESS, build.getResult());
 
-        Action action = build.getAction(0);
-        assertTrue(action instanceof SeleniumhqBuildAction);
-        
-        SeleniumhqBuildAction buildAction = (SeleniumhqBuildAction)action;
-        assertEquals(0, buildAction.getResult().getNumTestFailures());
-        assertEquals(14, buildAction.getResult().getNumTestPasses());
-        assertEquals(14, buildAction.getResult().getNumTestTotal());
-        */               
+        String s = FileUtils.readFileToString(build.getLogFile());
+        assertTrue(s.contains("Test failures: 0"));
+        assertTrue(s.contains("Test totals  : 14"));                     
     }
 	
 	/**
@@ -198,8 +180,7 @@ public class SeleniumhqPublisherTest extends HudsonTestCase
 	 * @throws Exception
 	 */
 	public void test7() throws Exception 
-	{
-		/*
+	{		
         FreeStyleProject project = createFreeStyleProject();
         project.getPublishersList().add(new SeleniumhqPublisher("*.html"));
         
@@ -214,14 +195,9 @@ public class SeleniumhqPublisherTest extends HudsonTestCase
         
         assertEquals(Result.UNSTABLE, build.getResult());
 
-        Action action = build.getAction(0);
-        assertTrue(action instanceof SeleniumhqBuildAction);
-        
-        SeleniumhqBuildAction buildAction = (SeleniumhqBuildAction)action;
-        assertEquals(1, buildAction.getResult().getNumTestFailures());
-        assertEquals(16, buildAction.getResult().getNumTestPasses());
-        assertEquals(17, buildAction.getResult().getNumTestTotal());
-        */               
+        String s = FileUtils.readFileToString(build.getLogFile());
+        assertTrue(s.contains("Test failures: 1"));
+        assertTrue(s.contains("Test totals  : 17"));                  
     }
 	
 	/**
