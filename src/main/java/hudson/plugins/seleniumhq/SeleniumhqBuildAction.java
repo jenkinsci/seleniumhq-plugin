@@ -52,7 +52,7 @@ public class SeleniumhqBuildAction implements Action, Serializable {
     }
     
     public String getIconFileName() {
-        return "graph.gif";  
+        return "/plugin/seleniumhq/icons/sla-24x24.png";  
     }
 
     public String getDisplayName() {

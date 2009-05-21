@@ -49,7 +49,7 @@ public class SeleniumhqProjectAction extends Actionable implements ProminentProj
 	}
 
 	public String getIconFileName() {
-		return "graph.gif";
+		return "/plugin/seleniumhq/icons/sla-48x48.png";
 	}
 
 	public String getUrlName() {

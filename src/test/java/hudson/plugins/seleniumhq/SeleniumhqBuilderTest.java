@@ -129,7 +129,7 @@ public class SeleniumhqBuilderTest extends HudsonTestCase
 	 * @throws Exception
 	 */
 	public void test6() throws Exception 
-	{				
+	{			
 		String browser = "*iexplore";
 		String startURL = "http://www.google.com"; 
 		String suiteFile = "TestSuites";
@@ -144,7 +144,7 @@ public class SeleniumhqBuilderTest extends HudsonTestCase
         assertEquals(Result.FAILURE, build.getResult());
 
         String s = FileUtils.readFileToString(build.getLogFile());
-        assertTrue(s.contains("ERROR: The suiteFile is not a file or an url ! Check your buil configuration."));
+        assertTrue(s.contains("ERROR: The suiteFile is not a file or an url ! Check your build configuration."));        
     }
 	
 	/**
