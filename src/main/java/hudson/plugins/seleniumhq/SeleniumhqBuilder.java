@@ -112,19 +112,19 @@ public class SeleniumhqBuilder extends Builder {
      * @throws InterruptedException 
      * @throws IOException 
      */
-    public boolean isFileSuiteFile(Build build) throws IOException, InterruptedException {    	    
+    public boolean isFileSuiteFile(Build build, Launcher launcher) throws IOException, InterruptedException {    	    
         FilePath suiteFilePath = new FilePath(build.getProject().getWorkspace(), this.suiteFile);               
-        if (suiteFilePath.exists()) // Remote check
+        if (suiteFilePath.exists())
         {
         	return suiteFilePath.isDirectory() == false;
         }
-        else // Local check
+        else 
         {
-        	if (new File(this.suiteFile).exists())
-    		{
-    			File file = new File(this.suiteFile);
-    			return file.isFile();
-    		}        
+        	suiteFilePath = new FilePath(launcher.getChannel(), this.suiteFile);
+        	if (suiteFilePath.exists()) 
+            {
+            	return suiteFilePath.isDirectory() == false;
+            }        	   
         }
         return false;
     }
@@ -132,7 +132,7 @@ public class SeleniumhqBuilder extends Builder {
     @SuppressWarnings("unchecked")
     public boolean perform(Build build, Launcher launcher, BuildListener listener)
             throws IOException, InterruptedException {
-
+    	
         // -------------------------------
         // Check global config
         // -------------------------------
@@ -166,35 +166,19 @@ public class SeleniumhqBuilder extends Builder {
             return false;
         }
 
-        // -------------------------------
-        // check suiteFile type url or file
-        // -------------------------------
+         // -------------------------------
+         // check suiteFile type url or file
+         // -------------------------------
          String suiteFile = null;
          FilePath tempSuite = null;
-         if (this.isFileSuiteFile(build)) 
-         {
+         if (this.isFileSuiteFile(build, launcher)) 
+         {        	 
         	 FilePath suiteFilePath = new FilePath(build.getProject().getWorkspace(), this.suiteFile);             
-        	 if (suiteFilePath.exists()) // File exist on remote
+        	 if (suiteFilePath.exists() == false) // File exist on remote
              {
-        		 suiteFile = suiteFilePath.getRemote();        		 
-             }
-        	 else
-        	 {
-        		 // Trasfer file on slave
-        		 tempSuite = build.getProject().getWorkspace().createTempFile("tempHtmlSuite", "html");
-            	 suiteFile = tempSuite.getRemote();
-            	 
-            	 File file = new File(this.suiteFile);
-            	             	
-            	 listener.getLogger().println("Try transfer suite file on slave");
-        		 listener.getLogger().println("    from file : " + file.getPath() );
-        		 listener.getLogger().println("    to file   : " + suiteFile);
-        		 
-        		 FilePath sourceFile = new FilePath(file);
-        		 sourceFile.copyTo(tempSuite);
-     			 listener.getLogger().println("    ...");
-    			 listener.getLogger().println("    Succeed");
+        		 suiteFilePath = new FilePath(launcher.getChannel(), this.suiteFile);        		  
         	 }
+        	 suiteFile = suiteFilePath.getRemote(); 
          } 
          else if (this.isURLSuiteFile()) 
          {        	         	 
@@ -254,24 +238,6 @@ public class SeleniumhqBuilder extends Builder {
                 this.getStartURL(), suiteFile, resultFile);
         launcher.launch(cmd, build.getEnvVars(), listener.getLogger(),
                 build.getProject().getWorkspace()).join();
-
-        // -------------------------------
-        // copy result file from Slave to Master
-        // -------------------------------        
-        File localWorkspace = new File(build.getProject().getRootDir(), "workspace");
-        File localResultFile = new File(localWorkspace, this.resultFile);
-        localResultFile.getParentFile().mkdirs();
-        FilePath localResultFilePath = new FilePath(localResultFile);
-        
-        if (resultFilePath.isRemote()) 		
-        {
-	        listener.getLogger().println("Try copy result file from Slave to Master");
-			listener.getLogger().println("    from file : " + resultFilePath.getRemote() );
-			listener.getLogger().println("    to file   : " + localResultFilePath.getRemote());			
-			resultFilePath.copyTo(localResultFilePath);
-			listener.getLogger().println("    ...");
-			listener.getLogger().println("    Succeed");
-        }
 		
         // -------------------------------
         // Delete the temp suite file

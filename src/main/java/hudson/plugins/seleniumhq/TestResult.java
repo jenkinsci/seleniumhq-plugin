@@ -1,5 +1,6 @@
 package hudson.plugins.seleniumhq;
 
+import hudson.FilePath;
 import hudson.Util;
 import hudson.util.IOException2;
 
@@ -22,7 +23,7 @@ public class TestResult implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private List<SuiteResult> suites = new ArrayList<SuiteResult>();
-	transient private List<File> files = new ArrayList<File>();
+	private List<String> files = new ArrayList<String>();
 	
 	public TestResult()
 	{
@@ -55,7 +56,7 @@ public class TestResult implements Serializable {
 		return getNumTestPasses() + getNumTestFailures();
 	}
 	
-	public List<File> getFiles() {
+	public List<String> getFiles() {
 		return files;
 	}
 
@@ -73,7 +74,7 @@ public class TestResult implements Serializable {
 				if (reportFile.length() != 0) 
 				{
 					parse(reportFile);
-					files.add(reportFile);
+					files.add(new FilePath(reportFile).getRemote());
 				}
 				else
 				{

@@ -87,8 +87,7 @@ public class SeleniumhqPublisher extends Publisher implements Serializable {
             final long buildTime = build.getTimestamp().getTimeInMillis();
             final long nowMaster = System.currentTimeMillis();
 
-            File workspace = new File(build.getProject().getRootDir(), "workspace");
-            FilePath workspacePath = new FilePath(workspace);
+            FilePath workspacePath = build.getProject().getWorkspace();
             TestResult result = workspacePath.act(new FileCallable<TestResult>() {
                 private static final long serialVersionUID = 1L;
 
@@ -114,11 +113,11 @@ public class SeleniumhqPublisher extends Publisher implements Serializable {
             }
 
             action = new SeleniumhqBuildAction(build, result, listener);
-
+      
             // Store result file
-            List<File> files = result.getFiles();
+            List<String> files = result.getFiles();
             if (files.size() == 1) {
-                FilePath source = new FilePath(files.get(0));
+                FilePath source = new FilePath(build.getProject().getWorkspace() ,files.get(0));
                 source.copyTo(new FilePath(rootTarget, "index.html"));
             } else {
                 String header = "<html><head><title>Selenium result</title></head><body><center><br/><h2>Selenium Test Result</h2><ul>";
@@ -127,8 +126,8 @@ public class SeleniumhqPublisher extends Publisher implements Serializable {
                 output.write(header.getBytes());
                 int index = 0;
                 // Make test index file
-                for (File file : files) {
-                    FilePath source = new FilePath(file);
+                for (String file : files) {        
+                	FilePath source = new FilePath(build.getProject().getWorkspace(), file);
                     String dest = index + "/" + source.getName();
                     source.copyTo(new FilePath(rootTarget, dest));
                     String link = "<li><a href=\"" + dest + "\">" + source.getName() + "</a></li>";
