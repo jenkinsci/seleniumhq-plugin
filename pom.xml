@@ -9,13 +9,7 @@
   
   <artifactId>seleniumhq</artifactId>
   <packaging>hpi</packaging>
-  <version>0.2</version>
+  <version>0.3-SNAPSHOT</version>
   <name>Hudson Seleniumhq plugin</name>
   <url>http://wiki.hudson-ci.org/display/HUDSON/Seleniumhq+Plugin</url>
-
-  <scm>
-    <connection>scm:svn:https://guest@svn.dev.java.net/svn/hudson/tags/seleniumhq-0.2</connection>
-    <developerConnection>scm:svn:https://svn.dev.java.net/svn/hudson/tags/seleniumhq-0.2</developerConnection>
-    <url>https://hudson.dev.java.net/source/browse/hudson/hudson/plugins/seleniumhq/tags/seleniumhq-0.2</url>
-  </scm>
 </project>
