@@ -60,7 +60,7 @@ public class SeleniumhqProjectAction extends Actionable implements ProminentProj
 		return getUrlName();
 	}
 
-	public void doDynamic(StaplerRequest req, StaplerResponse rsp) throws IOException, ServletException,InterruptedException 
+	public DirectoryBrowserSupport doDynamic(StaplerRequest req, StaplerResponse rsp) throws IOException, ServletException,InterruptedException
 	{
 		File rootFile = SeleniumhqPublisher.getSeleniumReportDir(project);
 		if (!rootFile.exists())rootFile.mkdir();		
@@ -73,7 +73,7 @@ public class SeleniumhqProjectAction extends Actionable implements ProminentProj
         	output.write(index.getBytes());
         	output.close();
 		}
-		new DirectoryBrowserSupport(this, "Seleniumhq").serveFile(req, rsp, rootTarget, "graph.gif", false);
+		return new DirectoryBrowserSupport(this, rootTarget, "Seleniumhq", "graph.gif", false);
 	}
 	
     public SeleniumhqBuildAction getLastResult() {

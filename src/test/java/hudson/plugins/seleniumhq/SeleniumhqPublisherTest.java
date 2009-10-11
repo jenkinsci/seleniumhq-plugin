@@ -1,12 +1,13 @@
 package hudson.plugins.seleniumhq;
 
-import hudson.model.Action;
+import hudson.model.AbstractProject;
 import hudson.model.Descriptor;
 import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
 import hudson.model.Result;
 import hudson.tasks.Publisher;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,10 +50,10 @@ public class SeleniumhqPublisherTest extends HudsonTestCase
 	/**
 	 * Test de la méthode getProjectAction
 	 */
-	public void testGetProjectAction()
+	public void testGetProjectAction() throws IOException
 	{
 		SeleniumhqPublisher publisher = new SeleniumhqPublisher("*.html");
-		assertTrue(publisher.getProjectAction(null) instanceof SeleniumhqProjectAction);
+		assertTrue(publisher.getProjectAction((AbstractProject)createFreeStyleProject()) instanceof SeleniumhqProjectAction);
 	}
 	
 	/**

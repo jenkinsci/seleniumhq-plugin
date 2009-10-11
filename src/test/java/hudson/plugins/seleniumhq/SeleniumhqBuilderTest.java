@@ -4,6 +4,7 @@ import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
 import hudson.model.Result;
 
+import java.io.File;
 import org.apache.commons.io.FileUtils;
 import org.jvnet.hudson.test.HudsonTestCase;
 import org.jvnet.hudson.test.SingleFileSCM;
@@ -160,7 +161,7 @@ public class SeleniumhqBuilderTest extends HudsonTestCase
 		String resultFile = "index.html";
 		String other = null;
         FreeStyleProject project = createFreeStyleProject();
-        suiteFile = project.getWorkspace().child("emptyResult.html").toURI().toString();
+        suiteFile = new File(new File(project.getRootDir(), "workspace"), "emptyResult.html").toURI().toString();
         project.getBuildersList().add(new SeleniumhqBuilder(browser, startURL, suiteFile, resultFile, other));
         project.setScm(new SingleFileSCM("emptyResult.html", getClass().getResource("emptyResult.html")));
         
@@ -190,7 +191,6 @@ public class SeleniumhqBuilderTest extends HudsonTestCase
         
         SeleniumhqBuilder.DESCRIPTOR.setSeleniumRunner("rtyrturturtur");
         FreeStyleBuild build = project.scheduleBuild2(0).get();
-        
         assertEquals(Result.SUCCESS, build.getResult());
     }
 }

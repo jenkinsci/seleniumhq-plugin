@@ -1,19 +1,23 @@
 package hudson.plugins.seleniumhq;
 
+import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
 import hudson.Util;
 import hudson.FilePath.FileCallable;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractItem;
+import hudson.model.AbstractProject;
 import hudson.model.Action;
 import hudson.model.BuildListener;
-import hudson.model.Descriptor;
 import hudson.model.Project;
 import hudson.model.Result;
 import hudson.remoting.VirtualChannel;
+import hudson.tasks.BuildStepDescriptor;
+import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Publisher;
-import hudson.util.FormFieldValidator;
+import hudson.tasks.Recorder;
+import hudson.util.FormValidation;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,20 +25,19 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.servlet.ServletException;
-
+import net.sf.json.JSONObject;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.types.FileSet;
+import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
-import org.kohsuke.stapler.StaplerResponse;
 
 /**
  * Clover {@link Publisher}.
  * 
  * @author Pascal Martin
  */
-public class SeleniumhqPublisher extends Publisher implements Serializable {
+public class SeleniumhqPublisher extends Recorder implements Serializable {
 
     /**
 	 * 
@@ -59,13 +62,13 @@ public class SeleniumhqPublisher extends Publisher implements Serializable {
         return testResults;
     }
 
-    public Descriptor<Publisher> getDescriptor() {
-        return DESCRIPTOR;
+    public BuildStepMonitor getRequiredMonitorService() {
+        return BuildStepMonitor.BUILD;
     }
 
-    @SuppressWarnings("unchecked")
-    public Action getProjectAction(Project project) {
-        return new SeleniumhqProjectAction(project);
+    @Override
+    public Action getProjectAction(AbstractProject<?,?> project) {
+        return project instanceof Project ? new SeleniumhqProjectAction((Project)project) : null;
     }
 
     /** Gets the directory where the Clover Report is stored for the given project. */
@@ -73,6 +76,7 @@ public class SeleniumhqPublisher extends Publisher implements Serializable {
         return new File(project.getRootDir(), "seleniumhq");
     }
 
+    @Override
     public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener)
             throws InterruptedException, IOException {
         listener.getLogger().println("Publishing Selenium report...");
@@ -87,7 +91,7 @@ public class SeleniumhqPublisher extends Publisher implements Serializable {
             final long buildTime = build.getTimestamp().getTimeInMillis();
             final long nowMaster = System.currentTimeMillis();
 
-            FilePath workspacePath = build.getProject().getWorkspace();
+            FilePath workspacePath = build.getWorkspace();
             TestResult result = workspacePath.act(new FileCallable<TestResult>() {
                 private static final long serialVersionUID = 1L;
 
@@ -117,7 +121,7 @@ public class SeleniumhqPublisher extends Publisher implements Serializable {
             // Store result file
             List<String> files = result.getFiles();
             if (files.size() == 1) {
-                FilePath source = new FilePath(build.getProject().getWorkspace() ,files.get(0));
+                FilePath source = new FilePath(build.getWorkspace() ,files.get(0));
                 source.copyTo(new FilePath(rootTarget, "index.html"));
             } else {
                 String header = "<html><head><title>Selenium result</title></head><body><center><br/><h2>Selenium Test Result</h2><ul>";
@@ -127,7 +131,7 @@ public class SeleniumhqPublisher extends Publisher implements Serializable {
                 int index = 0;
                 // Make test index file
                 for (String file : files) {        
-                	FilePath source = new FilePath(build.getProject().getWorkspace(), file);
+                	FilePath source = new FilePath(build.getWorkspace(), file);
                     String dest = index + "/" + source.getName();
                     source.copyTo(new FilePath(rootTarget, dest));
                     String link = "<li><a href=\"" + dest + "\">" + source.getName() + "</a></li>";
@@ -162,9 +166,8 @@ public class SeleniumhqPublisher extends Publisher implements Serializable {
         return true;
     }
 
-    public static final DescriptorImpl DESCRIPTOR = new DescriptorImpl();
-
-    public static class DescriptorImpl extends Descriptor<Publisher> {
+    @Extension
+    public static class DescriptorImpl extends BuildStepDescriptor<Publisher> {
 
         public DescriptorImpl() {
             super(SeleniumhqPublisher.class);
@@ -174,29 +177,35 @@ public class SeleniumhqPublisher extends Publisher implements Serializable {
             return "Publish Selenium Report";
         }
 
-        @SuppressWarnings("deprecation")
-        public boolean configure(StaplerRequest req) throws FormException {
+        @Override
+        public boolean configure(StaplerRequest req, JSONObject formData) throws FormException {
             req.bindParameters(this, "seleniumhq.");
             save();
-            return super.configure(req); // To change body of overridden methods use File | Settings
-            // | File Templates.
+            return super.configure(req, formData);
         }
 
         /**
          * Performs on-the-fly validation on the file mask wildcard.
          */
-        public void doCheck(StaplerRequest req, StaplerResponse rsp,
-                @QueryParameter final String value) throws IOException, ServletException {
-            new FormFieldValidator.WorkspaceFileMask(req, rsp).process();
+        public FormValidation doCheck(@AncestorInPath AbstractProject project,
+                @QueryParameter String value) throws IOException {
+            return FilePath.validateFileMask(project.getSomeWorkspace(), value);
+        }
+
+        @Override
+        public boolean isApplicable(Class<? extends AbstractProject> jobType) {
+            return Project.class.isAssignableFrom(jobType);
         }
 
         /** Creates a new instance of {@link SeleniumhqPublisher} from a submitted form. */
-        public SeleniumhqPublisher newInstance(StaplerRequest req) throws FormException {
+        @Override
+        public SeleniumhqPublisher newInstance(StaplerRequest req, JSONObject formData) throws FormException {
             SeleniumhqPublisher instance = req.bindParameters(SeleniumhqPublisher.class,
                     "seleniumhq.");
             return instance;
         }
 
+        @Override
         public String getHelpFile() {
             return "/plugin/seleniumhq/help-publisher.html";
         }

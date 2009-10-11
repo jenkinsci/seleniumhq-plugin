@@ -1,19 +1,18 @@
 package hudson.plugins.seleniumhq;
 
+import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
-import hudson.model.Build;
+import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
 import hudson.model.Descriptor;
 import hudson.model.Result;
 import hudson.tasks.Builder;
-import hudson.util.FormFieldValidator;
+import hudson.util.FormValidation;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-
-import javax.servlet.ServletException;
 
 import net.sf.json.JSONObject;
 
@@ -21,7 +20,6 @@ import org.apache.commons.io.FileUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
-import org.kohsuke.stapler.StaplerResponse;
 
 /**
  * Sample {@link Builder}.
@@ -112,8 +110,8 @@ public class SeleniumhqBuilder extends Builder {
      * @throws InterruptedException 
      * @throws IOException 
      */
-    public boolean isFileSuiteFile(Build build, Launcher launcher) throws IOException, InterruptedException {    	    
-        FilePath suiteFilePath = new FilePath(build.getProject().getWorkspace(), this.suiteFile);               
+    public boolean isFileSuiteFile(AbstractBuild<?,?> build, Launcher launcher) throws IOException, InterruptedException {
+        FilePath suiteFilePath = new FilePath(build.getWorkspace(), this.suiteFile);               
         if (suiteFilePath.exists())
         {
         	return suiteFilePath.isDirectory() == false;
@@ -129,8 +127,8 @@ public class SeleniumhqBuilder extends Builder {
         return false;
     }
 
-    @SuppressWarnings("unchecked")
-    public boolean perform(Build build, Launcher launcher, BuildListener listener)
+    @Override
+    public boolean perform(AbstractBuild<?,?> build, Launcher launcher, BuildListener listener)
             throws IOException, InterruptedException {
     	
         // -------------------------------
@@ -173,7 +171,7 @@ public class SeleniumhqBuilder extends Builder {
          FilePath tempSuite = null;
          if (this.isFileSuiteFile(build, launcher)) 
          {        	 
-        	 FilePath suiteFilePath = new FilePath(build.getProject().getWorkspace(), this.suiteFile);             
+        	 FilePath suiteFilePath = new FilePath(build.getWorkspace(), this.suiteFile);             
         	 if (suiteFilePath.exists() == false) // File exist on remote
              {
         		 suiteFilePath = new FilePath(launcher.getChannel(), this.suiteFile);        		  
@@ -182,11 +180,11 @@ public class SeleniumhqBuilder extends Builder {
          } 
          else if (this.isURLSuiteFile()) 
          {        	         	 
-        	 tempSuite = build.getProject().getWorkspace().createTempFile("tempHtmlSuite", "html");
+        	 tempSuite = build.getWorkspace().createTempFile("tempHtmlSuite", "html");
         	 suiteFile = tempSuite.getRemote();
         	 try
         	 {
-        	     File localWorkspace = new File(build.getProject().getRootDir(), "workspace");
+        	     File localWorkspace = new File(build.getRootDir(), "workspace");
         	     File tempSuiteLocal = localWorkspace.createTempFile("tempHtmlSuite", "html");
         	     
         		 listener.getLogger().println("Try downloading suite file on master");
@@ -228,16 +226,16 @@ public class SeleniumhqBuilder extends Builder {
         // -------------------------------
         String seleniumRunner = FileUtil.getExecutableAbsolutePath(DESCRIPTOR.getSeleniumRunner());
 
-        FilePath resultFilePath = new FilePath(build.getProject().getWorkspace(), this.resultFile);
+        FilePath resultFilePath = new FilePath(build.getWorkspace(), this.resultFile);
         resultFilePath.getParent().mkdirs();
         String resultFile = resultFilePath.getRemote();
 
-        String cmd = String.format(
-                "java -jar \"%1$s\" %2$s -htmlSuite \"%3$s\" \"%4$s\" \"%5$s\" \"%6$s\"",
-                seleniumRunner, this.getOther() != null ? this.getOther() : "", this.getBrowser(),
-                this.getStartURL(), suiteFile, resultFile);
-        launcher.launch(cmd, build.getEnvVars(), listener.getLogger(),
-                build.getProject().getWorkspace()).join();
+        String[] cmd = {
+                "java", "-jar", seleniumRunner,
+                this.getOther() != null ? this.getOther() : "", "-htmlSuite",
+                this.getBrowser(), this.getStartURL(), suiteFile, resultFile };
+        launcher.launch().cmds(cmd).envs(build.getEnvironment(listener))
+                .stdout(listener).pwd(build.getWorkspace()).join();
 		
         // -------------------------------
         // Delete the temp suite file
@@ -248,13 +246,7 @@ public class SeleniumhqBuilder extends Builder {
         return true;
     }
 
-    public Descriptor<Builder> getDescriptor() {
-        return DESCRIPTOR;
-    }
-
-    /**
-     * Descriptor should be singleton.
-     */
+    @Extension
     public static final DescriptorImpl DESCRIPTOR = new DescriptorImpl();
 
     /**
@@ -285,9 +277,8 @@ public class SeleniumhqBuilder extends Builder {
          * @param value
          *            This receives the current value of the field.
          */
-        public void doCheckSeleniumRunner(StaplerRequest req, StaplerResponse rsp,
-                @QueryParameter final String value) throws IOException, ServletException {
-            new FormFieldValidator.Executable(req, rsp).process();
+        public FormValidation doCheckSeleniumRunner(@QueryParameter final String value) {
+            return FormValidation.validateExecutable(value);
         }
 
         /**
@@ -297,6 +288,7 @@ public class SeleniumhqBuilder extends Builder {
             return "SeleniumHQ htmlSuite Run";
         }
 
+        @Override
         public boolean configure(StaplerRequest req, JSONObject o) throws FormException {
             // to persist global configuration information,
             // set that to properties and call save().
@@ -320,26 +312,6 @@ public class SeleniumhqBuilder extends Builder {
 
         public boolean isGoodSeleniumRunner() {
             return this.seleniumRunner != null && this.seleniumRunner.length() > 0;
-        }
-
-        public void doCheckBrowser(StaplerRequest req, StaplerResponse rsp,
-                @QueryParameter final String value) throws IOException, ServletException {
-            new EmptyFormFieldValidator(value, "browser is mandatory", null).process();
-        }
-
-        public void doCheckStartURL(StaplerRequest req, StaplerResponse rsp,
-                @QueryParameter final String value) throws IOException, ServletException {
-            new EmptyFormFieldValidator(value, "startURL is mandatory", null).process();
-        }
-
-        public void doCheckSuiteFile(StaplerRequest req, StaplerResponse rsp,
-                @QueryParameter final String value) throws IOException, ServletException {
-            new EmptyFormFieldValidator(value, "suiteFile is mandatory", null).process();
-        }
-
-        public void doCheckResultFile(StaplerRequest req, StaplerResponse rsp,
-                @QueryParameter final String value) throws IOException, ServletException {
-            new EmptyFormFieldValidator(value, "resultFile is mandatory", null).process();
         }
     }
 }
