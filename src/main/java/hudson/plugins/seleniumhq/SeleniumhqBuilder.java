@@ -4,6 +4,7 @@ import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
+import hudson.model.Build;
 import hudson.model.BuildListener;
 import hudson.model.Descriptor;
 import hudson.model.Result;
@@ -234,16 +235,32 @@ public class SeleniumhqBuilder extends Builder {
                 "java", "-jar", seleniumRunner,
                 this.getOther() != null ? this.getOther() : "", "-htmlSuite",
                 this.getBrowser(), this.getStartURL(), suiteFile, resultFile };
-        launcher.launch().cmds(cmd).envs(build.getEnvironment(listener))
-                .stdout(listener).pwd(build.getWorkspace()).join();
-		
-        // -------------------------------
-        // Delete the temp suite file
-        // -------------------------------
-        if (tempSuite != null)
-        	tempSuite.delete();
-
-        return true;
+                
+        try 
+        {
+        	launcher.launch().cmds(cmd).envs(build.getEnvironment(listener)).stdout(listener.getLogger()).pwd(build.getWorkspace()).join();
+        	return true;
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+            listener.getLogger().println("IOException!");
+            return false;
+        } 
+        catch (InterruptedException e) 
+        {
+            e.printStackTrace();
+            listener.getLogger().println("InterruptedException!");
+            return false;
+        }
+        finally         
+        {		
+            // -------------------------------
+            // Delete the temp suite file
+            // -------------------------------
+            if (tempSuite != null)
+                tempSuite.delete();
+        }        
     }
 
     @Extension
