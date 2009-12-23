@@ -4,7 +4,6 @@ import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
-import hudson.model.Build;
 import hudson.model.BuildListener;
 import hudson.model.Descriptor;
 import hudson.model.Result;
@@ -14,6 +13,8 @@ import hudson.util.FormValidation;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import net.sf.json.JSONObject;
 
@@ -231,13 +232,27 @@ public class SeleniumhqBuilder extends Builder {
         resultFilePath.getParent().mkdirs();
         String resultFile = resultFilePath.getRemote();
 
-        String[] cmd = {
-                "java", "-jar", seleniumRunner,
-                this.getOther() != null ? this.getOther() : "", "-htmlSuite",
-                this.getBrowser(), this.getStartURL(), suiteFile, resultFile };
+        ArrayList cmd = new ArrayList();
+        cmd.add("java");
+        cmd.add("-jar");
+        cmd.add(seleniumRunner);
+        cmd.addAll(this.getOthers());
+        cmd.add("-htmlSuite");
+        cmd.add(this.getBrowser());
+        cmd.add(this.getStartURL());
+        cmd.add(suiteFile);
+        cmd.add(resultFile);
                 
         try 
         {
+                String javaCmdString = "";
+                Iterator<String> itr = cmd.iterator();
+                while(itr.hasNext())
+                {
+                    javaCmdString += " " + itr.next();
+                }
+
+                listener.getLogger().println(javaCmdString);
         	launcher.launch().cmds(cmd).envs(build.getEnvironment(listener)).stdout(listener.getLogger()).pwd(build.getWorkspace()).join();
         	return true;
         } 
@@ -261,6 +276,57 @@ public class SeleniumhqBuilder extends Builder {
             if (tempSuite != null)
                 tempSuite.delete();
         }        
+    }
+
+    /**
+     * @desc    get the arrayList of optional parameters
+     *
+     * @return  ArrayList containing parameters
+     */
+    private final ArrayList getOthers()
+    {
+        ArrayList cmdParams = new ArrayList();
+        
+        if (this.getOther() != null)
+        {
+            String otherParams = this.getOther();
+            String[] otherParamsArray = otherParams.split(" ");
+
+            for (int i = 0; i < otherParamsArray.length; ++i)
+            {
+                // Leave spaces between quotes
+                if (otherParamsArray[i].matches("\""))
+                {
+                    String paramBuffer = otherParamsArray[i];
+                    do
+                    {
+                        ++i;
+                        paramBuffer += otherParamsArray[i];
+
+                    } while ((!otherParamsArray[i].matches("\"")) && (i < otherParamsArray.length));
+
+                    cmdParams.add(paramBuffer);
+                }
+                else if(otherParamsArray[i].matches("\'"))
+                {
+                    String paramBuffer = otherParamsArray[i];
+                    do
+                    {
+                        ++i;
+                        paramBuffer += otherParamsArray[i];
+
+                    } while ((!otherParamsArray[i].matches("\'")) && (i < otherParamsArray.length));
+
+                    cmdParams.add(paramBuffer);
+                }
+                else
+                {
+                    cmdParams.add(otherParamsArray[i]);
+                }
+            }
+        }
+
+        return cmdParams;
     }
 
     @Extension
