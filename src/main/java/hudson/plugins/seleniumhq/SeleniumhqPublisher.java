@@ -29,6 +29,7 @@ import net.sf.json.JSONObject;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.types.FileSet;
 import org.kohsuke.stapler.AncestorInPath;
+import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 
@@ -54,6 +55,7 @@ public class SeleniumhqPublisher extends Recorder implements Serializable {
      * @param name
      * @stapler-constructor
      */
+    @DataBoundConstructor
     public SeleniumhqPublisher(String testResults) {
         this.testResults = testResults;
     }
