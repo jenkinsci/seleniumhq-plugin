@@ -5,16 +5,16 @@
     See global.jelly for a general discussion about jelly script.
     -->
     <f:entry title="browser" help="${rootURL}/plugin/seleniumhq/help-builder-browser.html">
-        <f:textbox field="browser" clazz="required" checkMessage="browser is mandatory"/>
+        <f:textbox field="browser" clazz="required" checkMessage="${%mandatory.browser}"/>
     </f:entry>
     <f:entry title="startURL" help="${rootURL}/plugin/seleniumhq/help-builder-starturl.html">
-        <f:textbox field="startURL" clazz="required" checkMessage="startURL is mandatory"/>
+        <f:textbox field="startURL" clazz="required" checkMessage="${%mandatory.startURL}"/>
     </f:entry>
     <f:entry title="suiteFile" help="${rootURL}/plugin/seleniumhq/help-builder-suitefile.html">
-        <f:textbox field="suiteFile" clazz="required" checkMessage="suiteFile is mandatory"/>
+        <f:textbox field="suiteFile" clazz="required" checkMessage="${%mandatory.suiteFile}"/>
     </f:entry>
     <f:entry title="resultFile" help="${rootURL}/plugin/seleniumhq/help-builder-resultfile.html">
-        <f:textbox field="resultFile" clazz="required" checkMessage="resultFile is mandatory"/>
+        <f:textbox field="resultFile" clazz="required" checkMessage="${%mandatory.resultFile}"/>
     </f:entry>    
     <f:entry title="other" help="${rootURL}/plugin/seleniumhq/help-builder-other.html">
         <f:textbox field="other" />
