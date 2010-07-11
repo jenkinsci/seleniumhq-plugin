@@ -22,7 +22,7 @@ public class SeleniumhqPublisherTest extends HudsonTestCase
 	 */
 	public void testSeleniumhqPublisher()
 	{
-		SeleniumhqPublisher publisher = new SeleniumhqPublisher("*.html");
+		SeleniumhqPublisher publisher = new SeleniumhqPublisher("*.html", false);
 		assertTrue(publisher instanceof Publisher);
 	}
 	
@@ -31,7 +31,7 @@ public class SeleniumhqPublisherTest extends HudsonTestCase
 	 */
 	public void testGetTestResults()
 	{
-		SeleniumhqPublisher publisher = new SeleniumhqPublisher("*.html");
+		SeleniumhqPublisher publisher = new SeleniumhqPublisher("*.html", false);
 		assertEquals("*.html", publisher.getTestResults());
 	}
 	
@@ -40,7 +40,7 @@ public class SeleniumhqPublisherTest extends HudsonTestCase
 	 */
 	public void testGetDescriptor()
 	{
-		SeleniumhqPublisher publisher = new SeleniumhqPublisher("*.html");
+		SeleniumhqPublisher publisher = new SeleniumhqPublisher("*.html", false);
 		Descriptor<Publisher> descriptor =  publisher.getDescriptor();
 		assertTrue(descriptor instanceof SeleniumhqPublisher.DescriptorImpl);
 		assertEquals("/plugin/seleniumhq/help-publisher.html", descriptor.getHelpFile());
@@ -52,7 +52,7 @@ public class SeleniumhqPublisherTest extends HudsonTestCase
 	 */
 	public void testGetProjectAction() throws IOException
 	{
-		SeleniumhqPublisher publisher = new SeleniumhqPublisher("*.html");
+		SeleniumhqPublisher publisher = new SeleniumhqPublisher("*.html", false);
 		assertTrue(publisher.getProjectAction((AbstractProject)createFreeStyleProject()) instanceof SeleniumhqProjectAction);
 	}
 	
@@ -63,7 +63,7 @@ public class SeleniumhqPublisherTest extends HudsonTestCase
 	public void test1() throws Exception 
 	{
         FreeStyleProject project = createFreeStyleProject();
-        project.getPublishersList().add(new SeleniumhqPublisher("*.html"));
+        project.getPublishersList().add(new SeleniumhqPublisher("*.html", false));
               
         FreeStyleBuild build = project.scheduleBuild2(0).get();
         assertEquals(Result.FAILURE, build.getResult());
@@ -80,7 +80,7 @@ public class SeleniumhqPublisherTest extends HudsonTestCase
 	public void test2() throws Exception 
 	{
         FreeStyleProject project = createFreeStyleProject();
-        project.getPublishersList().add(new SeleniumhqPublisher("*.html"));
+        project.getPublishersList().add(new SeleniumhqPublisher("*.html", false));
         
         project.setScm(new SingleFileSCM("badResult.html", getClass().getResource("badResult.html")));
         FreeStyleBuild build = project.scheduleBuild2(0).get();
@@ -101,7 +101,7 @@ public class SeleniumhqPublisherTest extends HudsonTestCase
 	public void test3() throws Exception 
 	{
         FreeStyleProject project = createFreeStyleProject();
-        project.getPublishersList().add(new SeleniumhqPublisher("*.html"));
+        project.getPublishersList().add(new SeleniumhqPublisher("*.html", false));
         
         project.setScm(new SingleFileSCM("emptyResult.html", getClass().getResource("emptyResult.html")));
         FreeStyleBuild build = project.scheduleBuild2(0).get();
@@ -122,7 +122,7 @@ public class SeleniumhqPublisherTest extends HudsonTestCase
 	public void test4() throws Exception 
 	{		
         FreeStyleProject project = createFreeStyleProject();
-        project.getPublishersList().add(new SeleniumhqPublisher("*.html"));
+        project.getPublishersList().add(new SeleniumhqPublisher("*.html", false));
         
         project.setScm(new SingleFileSCM("testResult.html", getClass().getResource("testResult.html")));
         FreeStyleBuild build = project.scheduleBuild2(0).get();
@@ -135,13 +135,13 @@ public class SeleniumhqPublisherTest extends HudsonTestCase
     }
 	
 	/**
-	 * Test du Publisher avec 1 fichier valide avec failures
+	 * Test du Publisher avec 1 fichier valide avec failures et numCommandErrors > 0
 	 * @throws Exception
 	 */
 	public void test5() throws Exception 
 	{		
         FreeStyleProject project = createFreeStyleProject();
-        project.getPublishersList().add(new SeleniumhqPublisher("*.html"));
+        project.getPublishersList().add(new SeleniumhqPublisher("*.html", false));
         
         project.setScm(new SingleFileSCM("testResultWithFailure.html", getClass().getResource("testResultWithFailure.html")));
         FreeStyleBuild build = project.scheduleBuild2(0).get();
@@ -150,7 +150,32 @@ public class SeleniumhqPublisherTest extends HudsonTestCase
 
         String s = FileUtils.readFileToString(build.getLogFile());
         assertTrue(s.contains("Test failures: 1"));
-        assertTrue(s.contains("Test totals  : 3"));    
+        assertTrue(s.contains("Test totals  : 3"));   
+        assertTrue(s.contains("Command Passes   : 37"));    
+        assertTrue(s.contains("Command Failures : 5"));    
+        assertTrue(s.contains("Command Errors   : 1")); 
+    }
+	
+	/**
+     * Test du Publisher avec 1 fichier valide avec failures et numCommandErrors > 0
+     * @throws Exception
+     */
+    public void test5_2() throws Exception 
+    {       
+        FreeStyleProject project = createFreeStyleProject();
+        project.getPublishersList().add(new SeleniumhqPublisher("*.html", true));
+        
+        project.setScm(new SingleFileSCM("testResultWithFailure.html", getClass().getResource("testResultWithFailure.html")));
+        FreeStyleBuild build = project.scheduleBuild2(0).get();
+        
+        assertEquals(Result.FAILURE, build.getResult());
+
+        String s = FileUtils.readFileToString(build.getLogFile());
+        assertTrue(s.contains("Test failures: 1"));
+        assertTrue(s.contains("Test totals  : 3"));   
+        assertTrue(s.contains("Command Passes   : 37"));    
+        assertTrue(s.contains("Command Failures : 5"));    
+        assertTrue(s.contains("Command Errors   : 1")); 
     }
 	
 	/**
@@ -160,7 +185,7 @@ public class SeleniumhqPublisherTest extends HudsonTestCase
 	public void test6() throws Exception 
 	{		
         FreeStyleProject project = createFreeStyleProject();
-        project.getPublishersList().add(new SeleniumhqPublisher("*.html"));
+        project.getPublishersList().add(new SeleniumhqPublisher("*.html", false));
         
         List<SingleFileSCM> files = new ArrayList<SingleFileSCM>(2);
         files.add(new SingleFileSCM("testResult1.html", getClass().getResource("testResult.html")));
@@ -173,7 +198,7 @@ public class SeleniumhqPublisherTest extends HudsonTestCase
 
         String s = FileUtils.readFileToString(build.getLogFile());
         assertTrue(s.contains("Test failures: 0"));
-        assertTrue(s.contains("Test totals  : 14"));                     
+        assertTrue(s.contains("Test totals  : 14"));       
     }
 	
 	/**
@@ -183,7 +208,7 @@ public class SeleniumhqPublisherTest extends HudsonTestCase
 	public void test7() throws Exception 
 	{		
         FreeStyleProject project = createFreeStyleProject();
-        project.getPublishersList().add(new SeleniumhqPublisher("*.html"));
+        project.getPublishersList().add(new SeleniumhqPublisher("*.html", false));
         
         List<SingleFileSCM> files = new ArrayList<SingleFileSCM>(2);
         files.add(new SingleFileSCM("testResult1.html", getClass().getResource("testResult.html")));
@@ -202,13 +227,38 @@ public class SeleniumhqPublisherTest extends HudsonTestCase
     }
 	
 	/**
+     * Test du Publisher avec 3 fichier 2 valide et 1 avec failure
+     * @throws Exception
+     */
+    public void test7_2() throws Exception 
+    {       
+        FreeStyleProject project = createFreeStyleProject();
+        project.getPublishersList().add(new SeleniumhqPublisher("*.html", true));
+        
+        List<SingleFileSCM> files = new ArrayList<SingleFileSCM>(2);
+        files.add(new SingleFileSCM("testResult1.html", getClass().getResource("testResult.html")));
+        files.add(new SingleFileSCM("testResult2.html", getClass().getResource("testResult.html")));
+        files.add(new SingleFileSCM("testResult3.html", getClass().getResource("testResultWithFailure.html")));
+        
+        project.setScm(new MultiFileSCM(files));     
+        
+        FreeStyleBuild build = project.scheduleBuild2(0).get();
+        
+        assertEquals(Result.FAILURE, build.getResult());
+
+        String s = FileUtils.readFileToString(build.getLogFile());
+        assertTrue(s.contains("Test failures: 1"));
+        assertTrue(s.contains("Test totals  : 17"));                  
+    }
+	
+	/**
 	 * Test du Publisher avec 1 fichier valide avec 0 test
 	 * @throws Exception
 	 */
 	public void test8() throws Exception 
 	{
         FreeStyleProject project = createFreeStyleProject();
-        project.getPublishersList().add(new SeleniumhqPublisher("*.html"));
+        project.getPublishersList().add(new SeleniumhqPublisher("*.html", false));
         
         project.setScm(new SingleFileSCM("testResultNoTest.html", getClass().getResource("testResultNoTest.html")));
         FreeStyleBuild build = project.scheduleBuild2(0).get();
@@ -221,4 +271,27 @@ public class SeleniumhqPublisherTest extends HudsonTestCase
         assertTrue(s.contains("Publishing Selenium report..."));
         assertTrue(s.contains("ERROR: Result does not have test"));
     }
+	
+	/**
+     * Test du Publisher avec 1 fichier valide avec failures et numCommandErrors = 0
+     * @throws Exception
+     */
+    public void test9() throws Exception 
+    {       
+        FreeStyleProject project = createFreeStyleProject();
+        project.getPublishersList().add(new SeleniumhqPublisher("*.html", false));
+        
+        project.setScm(new SingleFileSCM("testResultWithFailureNoError.html", getClass().getResource("testResultWithFailureNoError.html")));
+        FreeStyleBuild build = project.scheduleBuild2(0).get();
+        
+        assertEquals(Result.UNSTABLE, build.getResult());
+
+        String s = FileUtils.readFileToString(build.getLogFile());
+        assertTrue(s.contains("Test failures: 1"));
+        assertTrue(s.contains("Test totals  : 3"));          
+        assertTrue(s.contains("Command Passes   : 37"));    
+        assertTrue(s.contains("Command Failures : 5"));    
+        assertTrue(s.contains("Command Errors   : 0"));   
+    }
+	
 }

@@ -49,21 +49,29 @@ public class SeleniumhqPublisher extends Recorder implements Serializable {
      * {@link FileSet} "includes" string, like "foo/bar/*.html"
      */
     private final String testResults;
+    
+    private final boolean useTestCommands;
 
     /**
      * 
-     * @param name
+     * @param testResults
+     * @param useTestCommands
      * @stapler-constructor
      */
     @DataBoundConstructor
-    public SeleniumhqPublisher(String testResults) {
+    public SeleniumhqPublisher(final String testResults, final boolean useTestCommands) {
         this.testResults = testResults;
+        this.useTestCommands = useTestCommands;
     }
 
     public String getTestResults() {
         return testResults;
     }
 
+    public Boolean getUseTestCommands() {
+        return useTestCommands;
+    }
+    
     public BuildStepMonitor getRequiredMonitorService() {
         return BuildStepMonitor.BUILD;
     }
@@ -161,9 +169,29 @@ public class SeleniumhqPublisher extends Recorder implements Serializable {
 
         listener.getLogger().println("  Test failures: " + action.getResult().getNumTestFailures());
         listener.getLogger().println("  Test totals  : " + action.getResult().getNumTestTotal());
-
-        if (action.getResult().getNumTestFailures() > 0)
-            build.setResult(Result.UNSTABLE);
+        listener.getLogger().println("------------------------");        
+        listener.getLogger().println("  Command Passes   : " + action.getResult().numCommandPasses());
+        listener.getLogger().println("  Command Failures : " + action.getResult().numCommandFailures());
+        listener.getLogger().println("  Command Errors   : " + action.getResult().numCommandErrors());
+        
+        if (useTestCommands)
+        {
+            if (action.getResult().numCommandFailures() > 0)
+            {
+                build.setResult(Result.UNSTABLE);
+            }
+            if (action.getResult().numCommandErrors() > 0)
+            {
+                build.setResult(Result.FAILURE);
+            }
+        }
+        else
+        {
+            if (action.getResult().getNumTestFailures() > 0)
+            {
+                build.setResult(Result.UNSTABLE);
+            }
+        }
 
         return true;
     }

@@ -14,14 +14,27 @@ import java.io.Serializable;
 public class SuiteResult implements Serializable {
 
 	private int numTestPasses;
-	private int numTestFailures;	
+	private int numTestFailures;
+	private int numCommandPasses;
+	private int numCommandFailures;
+	private int numCommandErrors;
+
 		
 	public SuiteResult(int numTestPasses, int numTestFailures)
 	{
 		this.numTestPasses = numTestPasses;
-		this.numTestFailures = numTestFailures;		
+		this.numTestFailures = numTestFailures;
 	}	
 
+	public SuiteResult(int numTestPasses, int numTestFailures, int numCommandPasses,
+		int numCommandFailures, int numCommandErrors)
+	{
+		this.numTestPasses = numTestPasses;
+		this.numTestFailures = numTestFailures;
+		this.numCommandPasses = numCommandPasses;
+		this.numCommandFailures = numCommandFailures;
+		this.numCommandErrors = numCommandErrors;
+	}	
 	public int getNumTestPasses() {
 		return numTestPasses;
 	}
@@ -30,9 +43,24 @@ public class SuiteResult implements Serializable {
 		return numTestFailures;
 	}
 
+	public int numCommandPasses() {
+		return numCommandPasses;
+	}
+
+	public int numCommandFailures() {
+		return numCommandFailures;
+	}
+
+	public int numCommandErrors() {
+		return numCommandErrors;
+	}
+
 	public static SuiteResult parse(InputStream xmlReport) throws Exception {
 		int numTestPasses = 0;
 		int numTestFailures = 0;
+		int numCommandPasses = 0;
+		int numCommandFailures = 0;
+		int numCommandErrors = 0;
 		
 		BufferedReader buff = null;
 		try
@@ -41,6 +69,9 @@ public class SuiteResult implements Serializable {
 
 			numTestPasses = Integer.valueOf(readInfo(buff,"numTestPasses:")).intValue();
 			numTestFailures = Integer.valueOf(readInfo(buff,"numTestFailures:")).intValue();
+			numCommandPasses = Integer.valueOf(readInfo(buff,"numCommandPasses:")).intValue();
+			numCommandFailures = Integer.valueOf(readInfo(buff,"numCommandFailures:")).intValue();
+			numCommandErrors = Integer.valueOf(readInfo(buff,"numCommandErrors:")).intValue();
 			
 			buff.close();
 		}
@@ -52,7 +83,7 @@ public class SuiteResult implements Serializable {
 			}
 		}
 		
-        return new SuiteResult(numTestPasses, numTestFailures);
+        return new SuiteResult(numTestPasses, numTestFailures, numCommandPasses, numCommandFailures, numCommandErrors);
     }
 	
 	private static String readInfo(BufferedReader buff, String infoName) throws IOException

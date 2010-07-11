@@ -4,4 +4,9 @@
     <f:textbox name="seleniumhq.testResults" value="${instance.testResults}"
                checkUrl="'descriptorByName/SeleniumhqPublisher/check?value='+escape(this.value)"/>
   </f:entry>
+  <f:advanced>
+	  <f:entry title="${%title.useTestCommands}" description="${%description.useTestCommands}">
+	    <f:checkbox name="seleniumhq.useTestCommands" checked="${instance.useTestCommands}" />
+	  </f:entry>
+  </f:advanced>
 </j:jelly>

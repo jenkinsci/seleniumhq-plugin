@@ -51,6 +51,30 @@ public class TestResult implements Serializable {
 		return count;
 	}
 
+	public int numCommandPasses() {
+		int count = 0;
+		for (SuiteResult suite : suites) {
+			count += suite.numCommandPasses();
+		}
+		return count;
+	}
+
+	public int numCommandFailures() {
+		int count = 0;
+		for (SuiteResult suite : suites) {
+			count += suite.numCommandFailures();
+		}
+		return count;
+	}
+
+	public int numCommandErrors() {
+		int count = 0;
+		for (SuiteResult suite : suites) {
+			count += suite.numCommandErrors();
+		}
+		return count;
+	}
+
 	public int getNumTestTotal()
 	{
 		return getNumTestPasses() + getNumTestFailures();
