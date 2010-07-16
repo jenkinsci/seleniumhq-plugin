@@ -286,8 +286,8 @@ public class SeleniumhqBuilder extends Builder {
     private final ArrayList getOthers()
     {
         ArrayList cmdParams = new ArrayList();
-        
-        if (this.getOther() != null)
+
+        if (this.getOther() != null && ! this.getOther().isEmpty())
         {
             String otherParams = this.getOther();
             String[] otherParamsArray = otherParams.split(" ");
