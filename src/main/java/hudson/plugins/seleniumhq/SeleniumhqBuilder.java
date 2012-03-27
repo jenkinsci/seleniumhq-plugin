@@ -289,7 +289,7 @@ public class SeleniumhqBuilder extends Builder {
 
         // fix https://issues.jenkins-ci.org/browse/JENKINS-7246 caused by patch in https://issues.jenkins-ci.org/browse/JENKINS-6996
         // (do not use "this.getOther().isEmpty()", to be compatible with jdk 1.5)
-        if (this.getOther() != null && this.getOther().length != 0)
+        if (this.getOther() != null && this.getOther().length() != 0)
         {
             String otherParams = this.getOther();
             String[] otherParamsArray = otherParams.split(" ");
