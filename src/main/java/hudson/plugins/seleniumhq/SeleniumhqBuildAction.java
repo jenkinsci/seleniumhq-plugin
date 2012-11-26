@@ -88,8 +88,8 @@ public class SeleniumhqBuildAction implements Action, Serializable {
             b = b.getPreviousBuild();
             if (b == null)
                 return null;
-            if (b.getResult() == Result.FAILURE)
-                continue;
+//            if (b.getResult() == Result.FAILURE)
+//                continue;
             SeleniumhqBuildAction r = b.getAction(SeleniumhqBuildAction.class);
             if (r != null)
                 return r;
