@@ -78,8 +78,8 @@ public class SeleniumhqProjectAction extends Actionable implements ProminentProj
 	
     public SeleniumhqBuildAction getLastResult() {
         for (Build<?, ?> b = project.getLastBuild(); b != null; b = b.getPreviousBuild()) {
-            if (b.getResult() == Result.FAILURE)
-                continue;
+//            if (b.getResult() == Result.FAILURE)
+//                continue;
             SeleniumhqBuildAction r = b.getAction(SeleniumhqBuildAction.class);
             if (r != null)
                 return r;
